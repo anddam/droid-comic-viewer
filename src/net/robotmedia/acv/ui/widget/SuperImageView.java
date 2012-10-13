@@ -316,6 +316,23 @@ public class SuperImageView extends ImageView {
 		safeScrollBy(distanceX, distanceY, getWidth(), getHeight());
 	}	
 
+	private boolean mySafeScrollBy( int distanceY, int height) {
+		int scrollY = getScrollY() + distanceY;
+		Log.w("SonyHack", "SuperImageView.mySafeScrollBy()" +
+				"\tmoveBy:" + distanceY +
+				"\tnextY:" + scrollY+
+				"\theight:" + height);
+		if (scrollY == height) return false;
+		else return true;
+	}
+
+	public boolean willScrollChangeImage(int offset) {
+		int height = getHeight();
+		int futureYCoord = getScrollY() + offset;
+		if (futureYCoord == height || futureYCoord < 0) return false;
+		else return true;
+	}
+
 	public void scale(String scaleMode, boolean recalculateScroll) {
 		abortScrollerAnimation();
 		int newWidth;

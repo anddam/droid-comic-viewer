@@ -773,6 +773,16 @@ public class ComicView extends RelativeLayout implements OnCompletionListener, O
 
 	}
 	
+	public boolean willScrollChangeView(int offset) {
+		ComicFrame current = (ComicFrame) mSwitcher.getCurrentView();
+		if (current.getImage().willScrollChangeImage(offset)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public void scroll(MotionEvent event) {
 		if (!isAnimating()) {
 			ComicFrame current = (ComicFrame) mSwitcher.getCurrentView();

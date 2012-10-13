@@ -49,6 +49,8 @@ public class Constants {
 	public static final String INPUT_CORNER_BOTTOM_RIGHT = "corner_bottom_right";
 	public static final String INPUT_VOLUME_UP = "volume_up";
 	public static final String INPUT_VOLUME_DOWN = "volume_down";
+	public static final String SONY_NEXT_KEY = "sony_next";
+	public static final String SONY_PREV_KEY = "sony_prev";
 
 	
 	// Control keys
@@ -84,6 +86,9 @@ public class Constants {
 	public static final int DIALOG_FLIP_CONTROLS = 2;
 	public static final int DIALOG_PAGE_ERROR = 4;
 	
+	public static final int SCANCODE_SONY_NEXT = 106;
+	public static final int SCANCODE_SONY_PREV = 105;
+
 	// File extensions
 	public static final String JPG_EXTENSION = "jpg";
 	public static final String JPEG_EXTENSION = "jpeg";
@@ -130,6 +135,7 @@ public class Constants {
 	public static final float MIN_FLING_DIFFERENCE_DIP = 120.0f;
 	public static final int MAX_FLING_ANGLE = 25;
 	public static final float MANUAL_SCROLL_INCREMENT_DIP = 100.0f;
+	public static final float MANUAL_SONY_SCROLL_INCREMENT_DIP = 240.0f;
 	public static final float CORNER_WIDTH_DIP = 80;
 	
 	// Actions
@@ -142,6 +148,8 @@ public class Constants {
 	public static final String ACTION_VALUE_ROTATE = "rotate";
 	public static final String ACTION_VALUE_SCROLL_UP = "scroll_up";
 	public static final String ACTION_VALUE_SCROLL_DOWN = "scroll_down";	
+	public static final String ACTION_VALUE_SONY_SCROLL_UP = "sony_scroll_up";
+	public static final String ACTION_VALUE_SONY_SCROLL_DOWN = "sony_scroll_down";
 	public static final String ACTION_VALUE_SCROLL_LEFT = "scroll_left";
 	public static final String ACTION_VALUE_SCROLL_RIGHT = "scroll_right";	
 	public static final String ACTION_VALUE_FIRST = "first";

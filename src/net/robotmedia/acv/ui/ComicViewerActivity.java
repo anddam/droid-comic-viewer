@@ -366,6 +366,7 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		int scanCode = event.getScanCode();
 		if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
 			final String action = preferences.getString(Constants.INPUT_VOLUME_UP, Constants.ACTION_VALUE_PREVIOUS);
 			if (Constants.ACTION_VALUE_NONE.equals(action)) {
@@ -392,6 +393,10 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 			return action(Constants.TRACKBALL_DOWN_KEY, Constants.ACTION_VALUE_ZOOM_OUT);
 		} else if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
 			return action(Constants.TRACKBALL_CENTER_KEY, Constants.ACTION_VALUE_NEXT);
+		} else if (scanCode == Constants.SCANCODE_SONY_PREV) {
+			return action(Constants.SONY_PREV_KEY, Constants.ACTION_VALUE_SONY_SCROLL_UP);
+		} else if (scanCode == Constants.SCANCODE_SONY_NEXT) {
+			return action(Constants.SONY_NEXT_KEY, Constants.ACTION_VALUE_SONY_SCROLL_DOWN);
 		}  else if (keyCode == KeyEvent.KEYCODE_BACK) {
 			final String action = preferences.getString(Constants.BACK_KEY, Constants.ACTION_VALUE_NONE);
 			if (Constants.ACTION_VALUE_NONE.equals(action)) {
@@ -739,6 +744,7 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 		// Actions that require a comic
 		if (isComicLoaded()) {
 			final int scrollIncrement = MathUtils.dipToPixel(this, Constants.MANUAL_SCROLL_INCREMENT_DIP);
+			final int sonyScrollIncrement = MathUtils.dipToPixel(this, Constants.MANUAL_SONY_SCROLL_INCREMENT_DIP);
 			if (Constants.ACTION_VALUE_PREVIOUS.equals(actionValue)) {
 				action = previous();
 			} else if (Constants.ACTION_VALUE_PREVIOUS_SCREEN.equals(actionValue)) {
@@ -751,6 +757,10 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 				action = mScreen.scroll(0, -scrollIncrement);
 			} else if (Constants.ACTION_VALUE_SCROLL_DOWN.equals(actionValue)) {
 				action = mScreen.scroll(0, scrollIncrement);
+			} else if (Constants.ACTION_VALUE_SONY_SCROLL_UP.equals(actionValue)) {
+				action = sonyScroll(-sonyScrollIncrement);
+			} else if (Constants.ACTION_VALUE_SONY_SCROLL_DOWN.equals(actionValue)) {
+				action = sonyScroll(sonyScrollIncrement);
 			} else if (Constants.ACTION_VALUE_SCROLL_LEFT.equals(actionValue)) {
 				action = mScreen.scroll(-scrollIncrement, 0);
 			} else if (Constants.ACTION_VALUE_SCROLL_RIGHT.equals(actionValue)) {
@@ -965,6 +975,18 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 		return false;
 	}
 	
+	private boolean sonyScroll(int increment) {
+		boolean action = false;
+		if (mScreen.willScrollChangeView(increment) ) {
+			action = mScreen.scroll(0, increment);
+		}
+		else {
+			if (increment < 0) action = previousScreen();
+			else action = nextScreen();
+		}
+		return action;
+	}
+
 	private boolean previous() {
 		int index = mScreen.getIndex();
 		int frameIndex = mScreen.getFrameIndex();
@@ -1160,7 +1182,6 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 		this.adjustCornersVisibility(false);
 	}
 
-	@Override
 	public void onScreenChanged(int index) {
 		if(comic != null) {
 			final String path = comic.getPath();
