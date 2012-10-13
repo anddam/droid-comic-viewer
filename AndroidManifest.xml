@@ -17,11 +17,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.androidcomics.acv"
     android:versionCode="44"
-    android:versionName="1.4.1.2" android:installLocation="preferExternal">
+    android:versionName="1.4.1.2">
 
     <uses-sdk
         android:minSdkVersion="4"
-        android:targetSdkVersion="13" />
+        android:targetSdkVersion="14" />
 
     <supports-screens
         anyDensity="false"
