@@ -26,3 +26,4 @@ res/values/private_s.xml
 *.iml
 out/
 lint.xml
+.classpath
