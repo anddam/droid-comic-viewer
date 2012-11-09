@@ -13,22 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package net.robotmedia.acv;
+package net.robotmedia.acv.ui.settings.mobile;
 
-import net.robotmedia.acv.billing.BillingManager;
-import net.robotmedia.acv.logic.PreferencesController;
-import android.app.Application;
+import net.androidcomics.acv.R;
 
-public class ACVApplication extends Application {
-
+public class VisualSettingsActivity extends ExtendedPreferenceActivity {
+	
 	@Override
-	public void onCreate() {
-		super.onCreate();
-		final PreferencesController preferences = new PreferencesController(this);
-		preferences.legacy();
-		preferences.setMaxImageResolution();
-
-		BillingManager.getInstance(this).initialize();
+	protected int getPreferencesResource() {
+		return R.xml.visual_settings;
 	}
-
+	
 }

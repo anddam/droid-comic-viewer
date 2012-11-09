@@ -23,52 +23,54 @@ public class AdsManager {
 	
 	public static View getAd(Activity activity, int size) {
 		init(activity);
-		if (usesAds) {
-			View ad = AdMobProxy.getAd(activity, size, publisherId, testDeviceId);
-			ad.setId(R.id.ad);
-			return ad;
-		}
-		return null;
+		if (!usesAds) return null;
+
+		View ad = AdMobProxy.getAd(activity, size, publisherId, testDeviceId);
+		ad.setId(R.id.ad);
+		return ad;
 	}
 	
 	public static View getAd(Activity activity) {
 		init(activity);
-		if (usesAds) {
-			int adaptedSize;
-			int screenSize = activity.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
-			if(screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE || screenSize == RETRO_SCREENLAYOUT_SIZE_XLARGE) {
-				adaptedSize = SIZE_FULL_BANNER;
-			} else {
-				adaptedSize = SIZE_BANNER;
-			}
-			return getAd(activity, adaptedSize);
+		if (!usesAds) return null;
+		
+		int adaptedSize;
+		int screenSize = activity.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+		if(screenSize == Configuration.SCREENLAYOUT_SIZE_LARGE || screenSize == RETRO_SCREENLAYOUT_SIZE_XLARGE) {
+			adaptedSize = SIZE_FULL_BANNER;
+		} else {
+			adaptedSize = SIZE_BANNER;
 		}
-		return null;
+		return getAd(activity, adaptedSize);
 	}
 	
 	public static void destroyAds(Activity activity) {
-		if(usesAds) {
-			AdMobProxy.destroyAds(activity, R.id.ad);
-		}
+		if (!usesAds) return;
+		
+		AdMobProxy.destroyAds(activity, R.id.ad);
 	}
 
 	protected static void init(Context context) {
-		if (usesAds) {
-			if (publisherId == null) {
-				final int resourceId = context.getResources().getIdentifier(PUBLISHER_ID_RESOURCE_NAME, "string", context.getPackageName());
-				final int testDeviceResourceId = context.getResources().getIdentifier(PUBLISHER_TEST_DEVICE_ID, "string",
-						context.getPackageName());
+		if (!usesAds) return;
+		
+		if (publisherId != null) return;
+		
+		final int resourceId = context.getResources().getIdentifier(PUBLISHER_ID_RESOURCE_NAME, "string", context.getPackageName());
+		final int testDeviceResourceId = context.getResources().getIdentifier(PUBLISHER_TEST_DEVICE_ID, "string", context.getPackageName());
 
-				if (resourceId != 0) {
-					publisherId = context.getString(resourceId);
-				} else {
-					usesAds = false;
-				}
-
-				if (testDeviceResourceId != 0) {
-					testDeviceId = context.getString(testDeviceResourceId);
-				}
-			}
+		if (resourceId != 0) {
+			publisherId = context.getString(resourceId);
+			usesAds = true;
+		} else {
+			usesAds = false;
 		}
+
+		if (testDeviceResourceId != 0) {
+			testDeviceId = context.getString(testDeviceResourceId);
+		}
+	}
+	
+	public static void disableAds() {
+		usesAds = false;
 	}
 }

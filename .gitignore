@@ -27,3 +27,4 @@ res/values/private_s.xml
 out/
 lint.xml
 .classpath
+src/net/robotmedia/acv/billing/Configuration.java

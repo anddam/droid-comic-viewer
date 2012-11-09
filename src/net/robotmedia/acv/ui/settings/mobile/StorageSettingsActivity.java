@@ -13,17 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package net.robotmedia.acv.ui.settings;
+package net.robotmedia.acv.ui.settings.mobile;
 
 import net.androidcomics.acv.R;
+import net.robotmedia.acv.ui.settings.CollectionSettingsHelper;
 import android.os.Bundle;
+import android.preference.Preference;
 
-public class VisualSettingsFragment extends ExtendedPreferenceFragment {
-
+public class StorageSettingsActivity extends ExtendedPreferenceActivity {
+	
+	private CollectionSettingsHelper helper;
+	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.visual_settings);
+		
+		this.helper = new CollectionSettingsHelper(this) {
+			@Override
+			protected void clearHistory() {
+				super.clearHistory();
+				finish();
+			}
+		};
+		@SuppressWarnings("deprecation")
+		Preference preference = findPreference(CollectionSettingsHelper.PREFERENCE_CLEAR_HISTORY);
+		this.helper.prepareClearHistory(preference);
+	}
+	
+	@Override
+	protected int getPreferencesResource() {
+		return R.xml.storage_settings;
 	}
 	
 }

@@ -15,15 +15,28 @@
  ******************************************************************************/
 package net.robotmedia.acv.ui.settings;
 
-import java.util.List;
+import net.robotmedia.acv.billing.BillingManager;
+import android.app.Activity;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 
-import net.androidcomics.acv.R;
+public class PremiumSettingsHelper extends SettingsHelper {
 
-public class SettingsActivityPostHC extends ExtendedPreferenceActivity {
+	public PremiumSettingsHelper(Activity activity) {
+		super(activity);
+	}
 
-	@Override
-    public void onBuildHeaders(List<Header> target) {
-        loadHeadersFromResource(R.xml.preference_headers, target);
-    }
+	public final static String PREFERENCE_PURCHASE_PREMIUM = "purchase_premium";
+
+	public void preparePurchasePremium(Preference preference) {
+		preference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				BillingManager.getInstance(getActivity()).purchasePremium();
+				return true;
+			}
+		});
+	}
 	
 }

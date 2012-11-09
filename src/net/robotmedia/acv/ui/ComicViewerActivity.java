@@ -26,8 +26,8 @@ import net.robotmedia.acv.adapter.RecentListBaseAdapter;
 import net.robotmedia.acv.comic.Comic;
 import net.robotmedia.acv.logic.*;
 import net.robotmedia.acv.provider.HistoryManager;
-import net.robotmedia.acv.ui.settings.SettingsActivityPostHC;
-import net.robotmedia.acv.ui.settings.SettingsActivityPreHC;
+import net.robotmedia.acv.ui.settings.mobile.SettingsActivityMobile;
+import net.robotmedia.acv.ui.settings.tablet.SettingsActivityTablet;
 import net.robotmedia.acv.ui.widget.*;
 import net.robotmedia.acv.utils.*;
 import android.app.Dialog;
@@ -250,8 +250,16 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 		}
 		
 		if(comicPath == null) {
-			showRecentItems();
-			showAds();
+			Intent intent = getIntent();
+			boolean loaded = false;
+			
+			if(intent != null) {
+				loaded = attemptToLoadComicFromViewIntent(intent);
+			}
+			if(!loaded) {
+				showRecentItems();
+				showAds();
+			}
 		} else {
 			loadComic(comicPath);
 		}
@@ -261,6 +269,7 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 	@Override
 	public void onResume() {
 		mRecentItemsListAdapter.refresh();
+		this.showAds();
 		super.onResume();
 	}
 
@@ -951,6 +960,23 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 		}
 	}
 	
+	private boolean attemptToLoadComicFromViewIntent(Intent intent) {
+		if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+			final Uri uri = intent.getData();
+			try {
+				final File file = new File(new URI(uri.toString()));
+				String comicPath = file.getAbsolutePath();
+				if (comicPath != null) {
+					loadComic(comicPath, intent);
+					return true;
+				}
+			} catch (URISyntaxException e) {
+				Log.w("attemptToLoadComicFromViewIntent", "Invalid intent data");
+			}
+		}
+		return false;
+	}
+	
 	private boolean next() {
 		int index = mScreen.getIndex();
 		int frameIndex = mScreen.getFrameIndex();
@@ -1078,9 +1104,9 @@ public class ComicViewerActivity extends ExtendedActivity implements OnGestureLi
 	
 	private void startSettingsActivity() {
 		if(!isHoneyComb()) {
-			startActivityForResult(new Intent(this, SettingsActivityPreHC.class), Constants.SETTINGS_CODE);
+			startActivityForResult(new Intent(this, SettingsActivityMobile.class), Constants.SETTINGS_CODE);
 		} else {
-			startActivityForResult(new Intent(this, SettingsActivityPostHC.class), Constants.SETTINGS_CODE);
+			startActivityForResult(new Intent(this, SettingsActivityTablet.class), Constants.SETTINGS_CODE);
 		}
 	}
 	

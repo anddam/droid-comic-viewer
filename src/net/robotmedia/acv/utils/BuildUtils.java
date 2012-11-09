@@ -13,22 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package net.robotmedia.acv;
+package net.robotmedia.acv.utils;
 
-import net.robotmedia.acv.billing.BillingManager;
-import net.robotmedia.acv.logic.PreferencesController;
-import android.app.Application;
+import android.os.Build;
 
-public class ACVApplication extends Application {
+public class BuildUtils {
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		final PreferencesController preferences = new PreferencesController(this);
-		preferences.legacy();
-		preferences.setMaxImageResolution();
-
-		BillingManager.getInstance(this).initialize();
+	public static boolean isHoneycombOrLater() {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
 	}
-
+	
+	public static boolean isIceCreamSandwichOrLater() {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+	}
+	
 }
